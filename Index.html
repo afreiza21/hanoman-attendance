@@ -1,0 +1,3797 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Permissions-Policy" content="camera=(self), geolocation=(self)">
+
+  <title>Hanoman Attendance</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #0f1115;
+      color: #f5f5f5;
+    }
+
+    button,
+    input,
+    select {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* =========================
+       LOGIN
+    ========================= */
+
+    #loginPage {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at top, #29210d 0%, #0f1115 45%);
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: #181b21;
+      border: 1px solid #3c3218;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    }
+
+    .logo-box {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .logo-icon {
+      width: 75px;
+      height: 75px;
+      margin: auto;
+      border-radius: 20px;
+      background: linear-gradient(135deg,#d4af37,#8c6b12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #111;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .logo-title {
+      margin-top: 15px;
+      font-size: 23px;
+      font-weight: 700;
+    }
+
+    .logo-subtitle {
+      margin-top: 5px;
+      color: #aaa;
+      font-size: 13px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 13px;
+      color: #bbb;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 14px;
+      border-radius: 11px;
+      border: 1px solid #383c45;
+      background: #101216;
+      color: white;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .form-control:focus {
+      border-color: #d4af37;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 11px;
+      padding: 13px 18px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: .2s;
+    }
+
+    .btn:active {
+      transform: scale(.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg,#d4af37,#9d7710);
+      color: #111;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.1);
+    }
+
+    .btn-secondary {
+      background: #292d35;
+      color: #eee;
+    }
+
+    .btn-danger {
+      background: #702c2c;
+      color: white;
+    }
+
+    .btn-success {
+      background: #285f3b;
+      color: white;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    /* =========================
+       APP
+    ========================= */
+
+    #appPage {
+      min-height: 100vh;
+      background: #0f1115;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(15,17,21,.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #2d3037;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .brand {
+      font-weight: 800;
+      color: #d4af37;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    .role-badge {
+      padding: 5px 9px;
+      border-radius: 20px;
+      background: #332b12;
+      color: #e6c65b;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1250px;
+      margin: auto;
+      padding: 22px;
+    }
+
+    /* =========================
+       DASHBOARD
+    ========================= */
+
+    .welcome {
+      margin-bottom: 22px;
+    }
+
+    .welcome h2 {
+      margin: 0 0 5px;
+    }
+
+    .welcome p {
+      margin: 0;
+      color: #999;
+      font-size: 13px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .card {
+      background: #181b21;
+      border: 1px solid #2c3038;
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .stat-label {
+      color: #999;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .section-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 15px;
+    }
+
+    /* =========================
+       PERMISSION
+    ========================= */
+
+    #permissionOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,.82);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(5px);
+    }
+
+    .permission-box {
+      width: 100%;
+      max-width: 500px;
+      background: #191c22;
+      border: 1px solid #4a3b15;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 25px 80px rgba(0,0,0,.65);
+    }
+
+    .permission-icon {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      background: #332b12;
+      color: #e4c45b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+
+    .permission-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .permission-description {
+      text-align: center;
+      color: #aaa;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .permission-list {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .permission-item {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 13px;
+      border-radius: 12px;
+      background: #111318;
+      border: 1px solid #2c3038;
+    }
+
+    .permission-item-icon {
+      font-size: 24px;
+      width: 35px;
+      text-align: center;
+    }
+
+    .permission-item-content {
+      flex: 1;
+    }
+
+    .permission-item-title {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .permission-item-desc {
+      color: #888;
+      font-size: 11px;
+      margin-top: 3px;
+    }
+
+    .permission-status {
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .status-wait {
+      color: #aaa;
+    }
+
+    .status-ok {
+      color: #57d47b;
+    }
+
+    .status-denied {
+      color: #ff6c6c;
+    }
+
+    .permission-note {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #251f10;
+      border: 1px solid #4a3b15;
+      color: #cdbb82;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    /* =========================
+       ATTENDANCE
+    ========================= */
+
+    .attendance-card {
+      text-align: center;
+    }
+
+    .camera-wrapper {
+      width: 100%;
+      max-width: 500px;
+      margin: auto;
+      background: #050505;
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 4 / 3;
+      border: 2px solid #30343b;
+    }
+
+    #video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+      display: block;
+    }
+
+    #photoPreview {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .camera-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #777;
+      gap: 10px;
+    }
+
+    .camera-placeholder-icon {
+      font-size: 42px;
+    }
+
+    .location-status {
+      margin-top: 15px;
+      padding: 13px;
+      border-radius: 12px;
+      background: #15181d;
+      border: 1px solid #2c3038;
+      text-align: left;
+    }
+
+    .location-status strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .location-text {
+      color: #aaa;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .distance-ok {
+      color: #57d47b;
+    }
+
+    .distance-danger {
+      color: #ff6c6c;
+    }
+
+    .attendance-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .status-box {
+      margin-top: 15px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .status-item {
+      padding: 14px;
+      background: #111318;
+      border-radius: 12px;
+      border: 1px solid #2b2f36;
+    }
+
+    .status-item-label {
+      color: #888;
+      font-size: 11px;
+    }
+
+    .status-item-value {
+      margin-top: 5px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    /* =========================
+       ADMIN
+    ========================= */
+
+    .admin-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid #2d3037;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
+
+    th,
+    td {
+      padding: 11px;
+      border-bottom: 1px solid #292c32;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    th {
+      background: #131519;
+      color: #c8a83b;
+    }
+
+    td {
+      color: #ddd;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .badge-active {
+      background: #193a25;
+      color: #66d78a;
+    }
+
+    .badge-inactive {
+      background: #422020;
+      color: #ff7777;
+    }
+
+    .badge-admin {
+      background: #382f12;
+      color: #e1c45c;
+    }
+
+    .badge-user {
+      background: #1b2e3d;
+      color: #79bff1;
+    }
+
+    /* =========================
+       MODAL
+    ========================= */
+
+    #modalOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0,0,0,.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 480px;
+      background: #1a1d23;
+      border-radius: 18px;
+      padding: 22px;
+      border: 1px solid #363a42;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    /* =========================
+       LOADING
+    ========================= */
+
+    #loadingOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      background: rgba(0,0,0,.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loading-box {
+      background: #1b1e24;
+      border-radius: 15px;
+      padding: 25px 35px;
+      text-align: center;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 12px;
+      border: 4px solid #444;
+      border-top-color: #d4af37;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media(max-width: 900px) {
+      .cards {
+        grid-template-columns: repeat(2,1fr);
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media(max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+
+      .topbar {
+        padding: 12px 15px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .attendance-buttons {
+        grid-template-columns: 1fr;
+      }
+
+      .permission-box {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
+<div id="loginPage">
+
+  <div class="login-card">
+
+    <div class="logo-box">
+      <div class="logo-icon">H</div>
+
+      <div class="logo-title">
+        Hanoman Attendance
+      </div>
+
+      <div class="logo-subtitle">
+        The Hanoman Serenity House by Sajiwa
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Username</label>
+
+      <input
+        id="username"
+        class="form-control"
+        type="text"
+        autocomplete="username"
+        placeholder="Masukkan username"
+      >
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+
+      <input
+        id="password"
+        class="form-control"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Masukkan password"
+        onkeydown="if(event.key==='Enter') loginUser()"
+      >
+    </div>
+
+    <button
+      class="btn btn-primary btn-block"
+      onclick="loginUser()"
+    >
+      LOGIN
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     APP
+===================================================== -->
+
+<div id="appPage" class="hidden">
+
+  <div class="topbar">
+
+    <div class="brand">
+      HANOMAN ATTENDANCE
+    </div>
+
+    <div class="user-info">
+
+      <div>
+        <div id="topUserName"></div>
+        <span id="topUserRole" class="role-badge"></span>
+      </div>
+
+      <button
+        class="btn btn-secondary"
+        onclick="logout()"
+      >
+        Keluar
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="container">
+
+    <!-- =========================
+         EMPLOYEE
+    ========================== -->
+
+    <div id="employeeDashboard">
+
+      <div class="welcome">
+
+        <h2 id="welcomeName">
+          Selamat Datang
+        </h2>
+
+        <p>
+          Silakan lakukan absensi masuk dan pulang sesuai lokasi kerja.
+        </p>
+
+      </div>
+
+
+      <div class="dashboard-grid">
+
+        <!-- ABSENSI -->
+
+        <div class="card attendance-card">
+
+          <div class="section-title">
+            Absensi Hari Ini
+          </div>
+
+          <div class="camera-wrapper">
+
+            <video
+              id="video"
+              autoplay
+              playsinline
+              muted
+            ></video>
+
+            <img
+              id="photoPreview"
+              alt="Selfie"
+            >
+
+            <div
+              id="cameraPlaceholder"
+              class="camera-placeholder"
+            >
+              <div class="camera-placeholder-icon">
+                📷
+              </div>
+
+              <div>
+                Kamera belum aktif
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="location-status">
+
+            <strong>
+              📍 Status Lokasi
+            </strong>
+
+            <div
+              id="locationText"
+              class="location-text"
+            >
+              Menunggu izin lokasi...
+            </div>
+
+          </div>
+
+
+          <div class="attendance-buttons">
+
+            <button
+              id="btnMasuk"
+              class="btn btn-primary"
+              onclick="takeAttendance('MASUK')"
+              disabled
+            >
+              ABSEN MASUK
+            </button>
+
+            <button
+              id="btnPulang"
+              class="btn btn-secondary"
+              onclick="takeAttendance('PULANG')"
+              disabled
+            >
+              ABSEN PULANG
+            </button>
+
+          </div>
+
+
+          <button
+            id="btnRetake"
+            class="btn btn-secondary btn-block hidden"
+            style="margin-top:10px"
+            onclick="retakePhoto()"
+          >
+            ULANGI FOTO
+          </button>
+
+
+          <div class="status-box">
+
+            <div class="status-item">
+
+              <div class="status-item-label">
+                MASUK
+              </div>
+
+              <div
+                id="statusMasuk"
+                class="status-item-value"
+              >
+                -
+              </div>
+
+            </div>
+
+
+            <div class="status-item">
+
+              <div class="status-item-label">
+                PULANG
+              </div>
+
+              <div
+                id="statusPulang"
+                class="status-item-value"
+              >
+                -
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- INFORMASI -->
+
+        <div class="card">
+
+          <div class="section-title">
+            Informasi Perangkat
+          </div>
+
+          <div class="permission-list">
+
+            <div class="permission-item">
+
+              <div class="permission-item-icon">
+                📷
+              </div>
+
+              <div class="permission-item-content">
+
+                <div class="permission-item-title">
+                  Kamera
+                </div>
+
+                <div class="permission-item-desc">
+                  Digunakan untuk mengambil foto selfie absensi.
+                </div>
+
+              </div>
+
+              <div
+                id="infoCameraStatus"
+                class="permission-status status-wait"
+              >
+                -
+              </div>
+
+            </div>
+
+
+            <div class="permission-item">
+
+              <div class="permission-item-icon">
+                📍
+              </div>
+
+              <div class="permission-item-content">
+
+                <div class="permission-item-title">
+                  GPS / Lokasi
+                </div>
+
+                <div class="permission-item-desc">
+                  Digunakan untuk memastikan Anda berada di area Hanoman.
+                </div>
+
+              </div>
+
+              <div
+                id="infoLocationStatus"
+                class="permission-status status-wait"
+              >
+                -
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <button
+            class="btn btn-primary btn-block"
+            onclick="requestPermissions()"
+          >
+            🔐 AKTIFKAN KAMERA & GPS
+          </button>
+
+
+          <div
+            id="permissionHelp"
+            class="permission-note"
+          >
+            Jika izin sebelumnya pernah ditolak, aktifkan izin
+            Kamera dan Lokasi untuk situs ini melalui pengaturan
+            izin browser, kemudian tekan tombol di atas kembali.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         ADMIN
+    ========================== -->
+
+    <div
+      id="adminDashboard"
+      class="hidden"
+    >
+
+      <div class="welcome">
+
+        <h2>
+          Dashboard Administrator
+        </h2>
+
+        <p>
+          Kelola karyawan dan pantau absensi.
+        </p>
+
+      </div>
+
+
+      <div class="cards">
+
+        <div class="card">
+          <div class="stat-label">
+            Karyawan Aktif
+          </div>
+
+          <div
+            id="statKaryawan"
+            class="stat-number"
+          >
+            0
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="stat-label">
+            Hadir Hari Ini
+          </div>
+
+          <div
+            id="statHadir"
+            class="stat-number"
+          >
+            0
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="stat-label">
+            Sudah Pulang
+          </div>
+
+          <div
+            id="statPulang"
+            class="stat-number"
+          >
+            0
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="stat-label">
+            Belum Absen
+          </div>
+
+          <div
+            id="statBelum"
+            class="stat-number"
+          >
+            0
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="section-title">
+          Data Karyawan
+        </div>
+
+
+        <div class="admin-actions">
+
+          <button
+            class="btn btn-primary"
+            onclick="openEmployeeModal()"
+          >
+            + TAMBAH KARYAWAN
+          </button>
+
+          <button
+            class="btn btn-secondary"
+            onclick="loadEmployees()"
+          >
+            ↻ REFRESH
+          </button>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>ID</th>
+                <th>Nama</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Jabatan</th>
+                <th>Departemen</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="employeeTableBody">
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="card"
+        style="margin-top:18px"
+      >
+
+        <div class="section-title">
+          Aktivitas Absensi Hari Ini
+        </div>
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Nama</th>
+                <th>Tanggal</th>
+                <th>Jam</th>
+                <th>Tipe</th>
+                <th>Jarak</th>
+                <th>Foto</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="attendanceTableBody">
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     PERMISSION OVERLAY
+===================================================== -->
+
+<div
+  id="permissionOverlay"
+  class="hidden"
+>
+
+  <div class="permission-box">
+
+    <div id="embeddedNotice" class="permission-note hidden" style="margin-bottom:16px;text-align:center;">
+      <strong>Mode Google Sites terdeteksi</strong><br>
+      Untuk memastikan izin kamera dan GPS muncul normal, buka aplikasi absensi dalam halaman penuh.
+      <button type="button" class="btn btn-primary btn-block" style="margin-top:10px" onclick="openAttendanceStandalone()">
+        BUKA ABSENSI FULLSCREEN
+      </button>
+    </div>
+
+    <div class="permission-icon">
+      🔐
+    </div>
+
+    <div class="permission-title">
+      IZINKAN AKSES PERANGKAT
+    </div>
+
+    <div class="permission-description">
+
+      Untuk melakukan absensi, Hanoman Attendance
+      membutuhkan akses Kamera dan Lokasi perangkat Anda.
+
+    </div>
+
+
+    <div class="permission-list">
+
+      <div class="permission-item">
+
+        <div class="permission-item-icon">
+          📷
+        </div>
+
+        <div class="permission-item-content">
+
+          <div class="permission-item-title">
+            Kamera
+          </div>
+
+          <div class="permission-item-desc">
+            Untuk mengambil selfie sebagai bukti absensi.
+          </div>
+
+        </div>
+
+        <div
+          id="cameraPermissionStatus"
+          class="permission-status status-wait"
+        >
+          MENUNGGU
+        </div>
+
+      </div>
+
+
+      <div class="permission-item">
+
+        <div class="permission-item-icon">
+          📍
+        </div>
+
+        <div class="permission-item-content">
+
+          <div class="permission-item-title">
+            GPS / Lokasi
+          </div>
+
+          <div class="permission-item-desc">
+            Untuk memastikan absensi dilakukan di area Hanoman.
+          </div>
+
+        </div>
+
+        <div
+          id="locationPermissionStatus"
+          class="permission-status status-wait"
+        >
+          MENUNGGU
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <button
+      id="permissionButton"
+      class="btn btn-primary btn-block"
+      onclick="requestPermissions()"
+    >
+      AKTIFKAN KAMERA & GPS
+    </button>
+
+
+    <button
+      id="permissionRetryButton"
+      class="btn btn-secondary btn-block hidden"
+      style="margin-top:10px"
+      onclick="requestPermissions()"
+    >
+      COBA LAGI
+    </button>
+
+
+    <div
+      id="permissionMessage"
+      class="permission-note"
+    >
+      Tekan tombol di atas untuk memberikan izin Kamera dan GPS.
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     EMPLOYEE MODAL
+===================================================== -->
+
+<div
+  id="employeeModalOverlay"
+  class="hidden"
+  style="
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    background:rgba(0,0,0,.75);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  "
+>
+
+  <div class="modal">
+
+    <div
+      id="employeeModalTitle"
+      class="modal-title"
+    >
+      Tambah Karyawan
+    </div>
+
+
+    <input
+      type="hidden"
+      id="employeeId"
+    >
+
+
+    <div class="form-group">
+
+      <label>Nama</label>
+
+      <input
+        id="employeeName"
+        class="form-control"
+        placeholder="Nama lengkap"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Username</label>
+
+      <input
+        id="employeeUsername"
+        class="form-control"
+        placeholder="Username login"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Password</label>
+
+      <input
+        id="employeePassword"
+        class="form-control"
+        type="password"
+        placeholder="Password"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Role</label>
+
+      <select
+        id="employeeRole"
+        class="form-control"
+      >
+
+        <option value="KARYAWAN">
+          Karyawan
+        </option>
+
+        <option value="ADMIN">
+          Admin
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Jabatan</label>
+
+      <input
+        id="employeePosition"
+        class="form-control"
+        placeholder="Contoh: Front Office"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label>Departemen</label>
+
+      <input
+        id="employeeDepartment"
+        class="form-control"
+        placeholder="Contoh: Front Office"
+      >
+
+    </div>
+
+
+    <div
+      id="employeeStatusGroup"
+      class="form-group hidden"
+    >
+
+      <label>Status</label>
+
+      <select
+        id="employeeStatus"
+        class="form-control"
+      >
+
+        <option value="AKTIF">
+          Aktif
+        </option>
+
+        <option value="NONAKTIF">
+          Nonaktif
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="modal-buttons">
+
+      <button
+        class="btn btn-secondary"
+        onclick="closeEmployeeModal()"
+      >
+        BATAL
+      </button>
+
+      <button
+        class="btn btn-primary"
+        onclick="saveEmployee()"
+      >
+        SIMPAN
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     GENERAL MODAL
+===================================================== -->
+
+<div
+  id="modalOverlay"
+  class="hidden"
+>
+
+  <div class="modal">
+
+    <div
+      id="modalTitle"
+      class="modal-title"
+    >
+      Informasi
+    </div>
+
+    <div
+      id="modalMessage"
+      style="
+        color:#bbb;
+        font-size:13px;
+        line-height:1.6;
+      "
+    ></div>
+
+    <div class="modal-buttons">
+
+      <button
+        class="btn btn-primary"
+        onclick="closeModal()"
+      >
+        OK
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     LOADING
+===================================================== -->
+
+<div
+  id="loadingOverlay"
+  class="hidden"
+>
+
+  <div class="loading-box">
+
+    <div class="spinner"></div>
+
+    <div id="loadingText">
+      Memproses...
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+/* =====================================================
+   HANOMAN API BRIDGE
+   Cloudflare Pages -> Pages Function -> Apps Script
+===================================================== */
+(function () {
+  if (window.google && window.google.script && window.google.script.run) {
+    return;
+  }
+
+  function apiCall(action, args) {
+    return fetch('/api', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: action, args: args })
+    }).then(async function (response) {
+      let data = null;
+      try {
+        data = await response.json();
+      } catch (e) {
+        throw new Error('Respons server tidak valid.');
+      }
+      if (!response.ok || !data || data.success === false && data.error) {
+        throw new Error((data && (data.error || data.message)) || 'Server error.');
+      }
+      return data.result !== undefined ? data.result : data;
+    });
+  }
+
+  window.google = {
+    script: {
+      get run() {
+        let successHandler = null;
+        let failureHandler = null;
+
+        const chain = new Proxy({}, {
+          get: function (target, property) {
+            if (property === 'withSuccessHandler') {
+              return function (fn) {
+                successHandler = fn;
+                return chain;
+              };
+            }
+            if (property === 'withFailureHandler') {
+              return function (fn) {
+                failureHandler = fn;
+                return chain;
+              };
+            }
+            return function (...args) {
+              apiCall(property, args)
+                .then(function (result) {
+                  if (successHandler) successHandler(result);
+                })
+                .catch(function (error) {
+                  if (failureHandler) failureHandler(error);
+                  else console.error(error);
+                });
+              return chain;
+            };
+          }
+        });
+
+        return chain;
+      }
+    }
+  };
+})();
+
+
+/* =====================================================
+   GLOBAL VARIABLES
+===================================================== */
+
+let currentUser = null;
+
+let cameraStream = null;
+
+let selfieData = '';
+
+let currentLatitude = null;
+let currentLongitude = null;
+let currentAccuracy = null;
+
+let locationAllowed = false;
+let cameraAllowed = false;
+let insideRadius = false;
+
+let permissionRequestRunning = false;
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+function loginUser() {
+
+  const username =
+    document.getElementById('username').value.trim();
+
+  const password =
+    document.getElementById('password').value;
+
+  if (!username || !password) {
+
+    showModal(
+      'Login',
+      'Username dan password wajib diisi.'
+    );
+
+    return;
+  }
+
+  showLoading('Memeriksa login...');
+
+  google.script.run
+
+    .withSuccessHandler(function(result) {
+
+      hideLoading();
+
+      if (!result || !result.success) {
+
+        showModal(
+          'Login Gagal',
+          result?.message || 'Login gagal.'
+        );
+
+        return;
+      }
+
+      currentUser = result.user;
+
+      showApplication();
+
+    })
+
+    .withFailureHandler(function(error) {
+
+      hideLoading();
+
+      showModal(
+        'Error',
+        error.message || String(error)
+      );
+
+    })
+
+    .login(username, password);
+}
+
+
+/* =====================================================
+   SHOW APPLICATION
+===================================================== */
+
+function showApplication() {
+
+  document
+    .getElementById('loginPage')
+    .classList.add('hidden');
+
+  document
+    .getElementById('appPage')
+    .classList.remove('hidden');
+
+
+  document
+    .getElementById('topUserName')
+    .textContent = currentUser.nama;
+
+
+  document
+    .getElementById('topUserRole')
+    .textContent = currentUser.role;
+
+
+  document
+    .getElementById('welcomeName')
+    .textContent =
+      'Selamat Datang, ' + currentUser.nama;
+
+
+  if (
+    currentUser.role === 'ADMIN' ||
+    currentUser.role === 'SUPER ADMIN'
+  ) {
+
+    document
+      .getElementById('adminDashboard')
+      .classList.remove('hidden');
+
+    document
+      .getElementById('employeeDashboard')
+      .classList.add('hidden');
+
+    loadAdminDashboard();
+
+  } else {
+
+    document
+      .getElementById('adminDashboard')
+      .classList.add('hidden');
+
+    document
+      .getElementById('employeeDashboard')
+      .classList.remove('hidden');
+
+    loadEmployeeStatus();
+
+    /*
+      PENTING:
+
+      Jangan otomatis memanggil getUserMedia()
+      di sini.
+
+      Permission akan diminta ketika user
+      menekan tombol "AKTIFKAN KAMERA & GPS".
+    */
+
+    showPermissionOverlay();
+
+  }
+}
+
+
+/* =====================================================
+   PERMISSION OVERLAY
+===================================================== */
+
+function showPermissionOverlay() {
+
+  document
+    .getElementById('permissionOverlay')
+    .classList.remove('hidden');
+
+  const embeddedNotice = document.getElementById('embeddedNotice');
+
+  if (embeddedNotice) {
+    const isEmbedded = window.top !== window.self;
+    embeddedNotice.classList.toggle('hidden', !isEmbedded);
+  }
+
+  updatePermissionStatusUI();
+
+}
+
+function openAttendanceStandalone() {
+  // Harus dipanggil langsung dari klik user agar browser mengizinkan
+  // pembukaan tab baru tanpa dianggap popup otomatis.
+  window.open(window.location.href, '_blank', 'noopener,noreferrer');
+}
+
+
+
+function hidePermissionOverlay() {
+
+  document
+    .getElementById('permissionOverlay')
+    .classList.add('hidden');
+
+}
+
+
+/* =====================================================
+   REQUEST CAMERA + GPS
+===================================================== */
+
+async function requestPermissions() {
+
+  if (permissionRequestRunning) return;
+
+  permissionRequestRunning = true;
+  setPermissionButtonLoading(true);
+  setPermissionMessage('Meminta izin Kamera dan GPS...');
+
+  try {
+    // Jalankan kedua request dari satu klik user.
+    // Tidak ada setTimeout/delay sebelum permission browser dipanggil.
+    const cameraPromise = requestCameraPermission();
+    const locationPromise = requestLocationPermission();
+
+    const results = await Promise.all([cameraPromise, locationPromise]);
+    const cameraResult = results[0];
+    const locationResult = results[1];
+
+    updatePermissionStatusUI();
+
+    if (cameraResult && locationResult) {
+      setPermissionMessage('Kamera aktif. GPS aktif. Memeriksa lokasi Hanoman...');
+
+      // Kamera sudah disambungkan ke <video>; tunggu metadata video siap.
+      await waitForVideoReady();
+
+      hidePermissionOverlay();
+      updateAttendanceButtons();
+    } else {
+      showPermissionHelp();
+    }
+  } catch (error) {
+    console.error('Permission flow error:', error);
+    showPermissionHelp();
+  } finally {
+    permissionRequestRunning = false;
+    setPermissionButtonLoading(false);
+  }
+}
+
+function waitForVideoReady() {
+  return new Promise(function(resolve) {
+    const video = document.getElementById('video');
+    if (!video) { resolve(); return; }
+    if (video.readyState >= 2 && video.videoWidth > 0) {
+      resolve();
+      return;
+    }
+    const done = function() {
+      video.removeEventListener('loadedmetadata', done);
+      resolve();
+    };
+    video.addEventListener('loadedmetadata', done, { once: true });
+    setTimeout(resolve, 3000);
+  });
+}
+
+
+
+/* =====================================================
+   CAMERA PERMISSION
+===================================================== */
+
+async function requestCameraPermission() {
+
+  if (!window.isSecureContext) {
+    setPermissionMessage('Kamera membutuhkan HTTPS. Gunakan URL Web App Apps Script yang diawali https://.');
+    return false;
+  }
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    setPermissionMessage('Browser tidak mendukung akses kamera. Gunakan Chrome/Edge/Safari versi terbaru.');
+    return false;
+  }
+
+  try {
+    if (cameraStream && cameraStream.active) {
+      cameraAllowed = true;
+      startCameraPreview();
+      return true;
+    }
+
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: { ideal: 'user' },
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
+      },
+      audio: false
+    });
+
+    cameraAllowed = true;
+    startCameraPreview();
+    return true;
+
+  } catch (error) {
+    cameraAllowed = false;
+    console.error('Camera error:', error.name, error.message, error);
+
+    if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+      setPermissionMessage('Kamera ditolak browser. Pastikan izin Kamera situs ini = Izinkan. Jika aplikasi dibuka dari Google Sites, tekan BUKA ABSENSI FULLSCREEN terlebih dahulu.');
+    } else if (error.name === 'NotFoundError') {
+      setPermissionMessage('Kamera tidak ditemukan pada perangkat ini.');
+    } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
+      setPermissionMessage('Kamera sedang dipakai aplikasi lain. Tutup WhatsApp/Meet/Camera atau aplikasi lain yang memakai kamera, lalu coba lagi.');
+    } else if (error.name === 'SecurityError') {
+      setPermissionMessage('Browser memblokir kamera karena kebijakan keamanan halaman. Buka Web App langsung, bukan di dalam Google Sites.');
+    } else {
+      setPermissionMessage('Kamera tidak dapat digunakan (' + error.name + '): ' + (error.message || 'error tidak diketahui'));
+    }
+    return false;
+  }
+}
+
+
+
+/* =====================================================
+   CAMERA PREVIEW
+===================================================== */
+
+function startCameraPreview() {
+
+  const video =
+    document.getElementById('video');
+
+  const placeholder =
+    document.getElementById('cameraPlaceholder');
+
+
+  video.srcObject = cameraStream;
+
+  video.style.display = 'block';
+
+  placeholder.style.display = 'none';
+
+
+  video.play().catch(function(error) {
+
+    console.log(
+      'Video play:',
+      error
+    );
+
+  });
+
+
+  updatePermissionStatusUI();
+}
+
+
+/* =====================================================
+   LOCATION PERMISSION
+===================================================== */
+
+function requestLocationPermission() {
+  return new Promise(function(resolve) {
+    if (!window.isSecureContext) {
+      setPermissionMessage('GPS membutuhkan HTTPS. Buka Web App Apps Script langsung.');
+      locationAllowed = false;
+      resolve(false);
+      return;
+    }
+
+    if (!navigator.geolocation) {
+      setPermissionMessage('Browser tidak mendukung GPS/Lokasi.');
+      locationAllowed = false;
+      resolve(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        currentLatitude = position.coords.latitude;
+        currentLongitude = position.coords.longitude;
+        currentAccuracy = position.coords.accuracy;
+        locationAllowed = true;
+        checkCurrentLocation();
+        resolve(true);
+      },
+      function(error) {
+        locationAllowed = false;
+        console.error('Location error:', error.code, error.message, error);
+
+        if (error.code === error.PERMISSION_DENIED) {
+          setPermissionMessage('Lokasi ditolak browser. Pastikan izin Lokasi situs ini = Izinkan. Jika dibuka dari Google Sites, gunakan BUKA ABSENSI FULLSCREEN.');
+        } else if (error.code === error.POSITION_UNAVAILABLE) {
+          setPermissionMessage('Lokasi tidak tersedia. Aktifkan Location/GPS perangkat.');
+        } else if (error.code === error.TIMEOUT) {
+          setPermissionMessage('GPS terlalu lama mendapatkan lokasi. Aktifkan GPS dan coba lagi.');
+        } else {
+          setPermissionMessage('GPS tidak dapat digunakan: ' + (error.message || 'error tidak diketahui'));
+        }
+        resolve(false);
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+    );
+  });
+}
+
+
+
+/* =====================================================
+   CHECK LOCATION
+===================================================== */
+
+function checkCurrentLocation() {
+
+  if (
+    currentLatitude === null ||
+    currentLongitude === null
+  ) {
+
+    insideRadius = false;
+
+    updateLocationUI();
+
+    return;
+  }
+
+
+  google.script.run
+
+    .withSuccessHandler(function(config) {
+
+      const distance =
+        calculateDistance(
+
+          currentLatitude,
+          currentLongitude,
+
+          Number(config.latitude),
+          Number(config.longitude)
+
+        );
+
+
+      insideRadius =
+        distance <= Number(config.radius);
+
+
+      updateLocationUI(
+        Math.round(distance),
+        Number(config.radius)
+      );
+
+
+      updateAttendanceButtons();
+
+    })
+
+    .withFailureHandler(function(error) {
+
+      console.error(
+        'Location config error:',
+        error
+      );
+
+      insideRadius = false;
+
+      updateLocationUI();
+
+    })
+
+    .getLocationConfig();
+
+}
+
+
+/* =====================================================
+   HAVERSINE
+===================================================== */
+
+function calculateDistance(
+  lat1,
+  lon1,
+  lat2,
+  lon2
+) {
+
+  const R = 6371000;
+
+  const dLat =
+    toRadians(lat2 - lat1);
+
+  const dLon =
+    toRadians(lon2 - lon1);
+
+
+  const a =
+    Math.sin(dLat / 2) *
+    Math.sin(dLat / 2) +
+
+    Math.cos(toRadians(lat1)) *
+    Math.cos(toRadians(lat2)) *
+
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
+
+
+  const c =
+    2 *
+    Math.atan2(
+      Math.sqrt(a),
+      Math.sqrt(1 - a)
+    );
+
+
+  return R * c;
+
+}
+
+
+function toRadians(value) {
+
+  return value *
+    Math.PI /
+    180;
+
+}
+
+
+/* =====================================================
+   LOCATION UI
+===================================================== */
+
+function updateLocationUI(
+  distance,
+  radius
+) {
+
+  const element =
+    document.getElementById(
+      'locationText'
+    );
+
+
+  if (!locationAllowed) {
+
+    element.innerHTML =
+      '❌ Izin GPS belum diberikan.';
+
+    element.className =
+      'location-text distance-danger';
+
+    return;
+  }
+
+
+  if (
+    distance === undefined
+  ) {
+
+    element.innerHTML =
+      '📍 GPS aktif. Menentukan jarak...';
+
+    element.className =
+      'location-text';
+
+    return;
+  }
+
+
+  if (insideRadius) {
+
+    element.innerHTML =
+      '✅ Anda berada di area absensi.<br>' +
+      'Jarak: <strong>' +
+      distance +
+      ' meter</strong> dari lokasi Hanoman.';
+
+    element.className =
+      'location-text distance-ok';
+
+  } else {
+
+    element.innerHTML =
+      '❌ Anda berada di luar area absensi.<br>' +
+      'Jarak: <strong>' +
+      distance +
+      ' meter</strong>.' +
+      '<br>Radius maksimal: ' +
+      radius +
+      ' meter.';
+
+    element.className =
+      'location-text distance-danger';
+
+  }
+
+}
+
+
+/* =====================================================
+   PERMISSION STATUS UI
+===================================================== */
+
+function updatePermissionStatusUI() {
+
+  const cameraStatus =
+    document.getElementById(
+      'cameraPermissionStatus'
+    );
+
+  const locationStatus =
+    document.getElementById(
+      'locationPermissionStatus'
+    );
+
+  const infoCamera =
+    document.getElementById(
+      'infoCameraStatus'
+    );
+
+  const infoLocation =
+    document.getElementById(
+      'infoLocationStatus'
+    );
+
+
+  if (cameraAllowed) {
+
+    cameraStatus.textContent =
+      'DIIZINKAN';
+
+    cameraStatus.className =
+      'permission-status status-ok';
+
+
+    infoCamera.textContent =
+      'AKTIF';
+
+    infoCamera.className =
+      'permission-status status-ok';
+
+  } else {
+
+    cameraStatus.textContent =
+      'MENUNGGU';
+
+    cameraStatus.className =
+      'permission-status status-wait';
+
+
+    infoCamera.textContent =
+      'BELUM AKTIF';
+
+    infoCamera.className =
+      'permission-status status-denied';
+
+  }
+
+
+  if (locationAllowed) {
+
+    locationStatus.textContent =
+      'DIIZINKAN';
+
+    locationStatus.className =
+      'permission-status status-ok';
+
+
+    infoLocation.textContent =
+      'AKTIF';
+
+    infoLocation.className =
+      'permission-status status-ok';
+
+  } else {
+
+    locationStatus.textContent =
+      'MENUNGGU';
+
+    locationStatus.className =
+      'permission-status status-wait';
+
+
+    infoLocation.textContent =
+      'BELUM AKTIF';
+
+    infoLocation.className =
+      'permission-status status-denied';
+
+  }
+
+}
+
+
+/* =====================================================
+   PERMISSION BUTTON
+===================================================== */
+
+function setPermissionButtonLoading(
+  loading
+) {
+
+  const button =
+    document.getElementById(
+      'permissionButton'
+    );
+
+  const retry =
+    document.getElementById(
+      'permissionRetryButton'
+    );
+
+
+  if (loading) {
+
+    button.disabled = true;
+
+    button.textContent =
+      'MEMINTA IZIN...';
+
+    retry.classList.add(
+      'hidden'
+    );
+
+  } else {
+
+    button.disabled = false;
+
+    button.textContent =
+      'AKTIFKAN KAMERA & GPS';
+
+  }
+
+}
+
+
+/* =====================================================
+   PERMISSION MESSAGE
+===================================================== */
+
+function setPermissionMessage(
+  message
+) {
+
+  document
+    .getElementById(
+      'permissionMessage'
+    )
+    .textContent = message;
+
+}
+
+
+/* =====================================================
+   PERMISSION HELP
+===================================================== */
+
+function showPermissionHelp() {
+
+  updatePermissionStatusUI();
+
+  setPermissionButtonLoading(
+    false
+  );
+
+
+  document
+    .getElementById(
+      'permissionRetryButton'
+    )
+    .classList
+    .remove('hidden');
+
+
+  let message =
+    'Pastikan Kamera dan Lokasi diizinkan untuk situs ini. ' +
+    'Jika sebelumnya memilih "Tolak/Block", browser tidak selalu menampilkan popup lagi. ' +
+    'Buka ikon gembok/pengaturan situs di sebelah alamat website, ubah Kamera dan Lokasi menjadi "Izinkan/Allow", lalu tekan COBA LAGI.';
+
+
+  if (
+    cameraAllowed &&
+    !locationAllowed
+  ) {
+
+    message =
+      'Kamera sudah aktif, tetapi GPS belum diizinkan. ' +
+      'Aktifkan izin Lokasi situs ini lalu tekan COBA LAGI.';
+
+  } else if (
+    !cameraAllowed &&
+    locationAllowed
+  ) {
+
+    message =
+      'GPS sudah aktif, tetapi Kamera belum diizinkan. ' +
+      'Aktifkan izin Kamera situs ini lalu tekan COBA LAGI.';
+
+  }
+
+
+  setPermissionMessage(
+    message
+  );
+
+}
+
+
+/* =====================================================
+   ATTENDANCE BUTTON
+===================================================== */
+
+function updateAttendanceButtons() {
+
+  const masuk =
+    document.getElementById(
+      'btnMasuk'
+    );
+
+  const pulang =
+    document.getElementById(
+      'btnPulang'
+    );
+
+
+  const ready =
+    cameraAllowed &&
+    locationAllowed &&
+    insideRadius &&
+    selfieData;
+
+
+  masuk.disabled =
+    !ready;
+
+  pulang.disabled =
+    !ready;
+
+}
+
+
+/* =====================================================
+   TAKE SELFIE
+===================================================== */
+
+function captureSelfie() {
+
+  if (
+    !cameraStream ||
+    !cameraAllowed
+  ) {
+
+    showModal(
+      'Kamera',
+      'Kamera belum aktif.'
+    );
+
+    return false;
+  }
+
+
+  const video =
+    document.getElementById(
+      'video'
+    );
+
+
+  if (
+    !video.videoWidth ||
+    !video.videoHeight
+  ) {
+
+    showModal(
+      'Kamera',
+      'Kamera belum siap. Tunggu beberapa detik lalu coba lagi.'
+    );
+
+    return false;
+  }
+
+
+  const canvas =
+    document.createElement(
+      'canvas'
+    );
+
+
+  canvas.width =
+    video.videoWidth;
+
+  canvas.height =
+    video.videoHeight;
+
+
+  const ctx =
+    canvas.getContext('2d');
+
+
+  /*
+    Mirror selfie agar sesuai tampilan kamera.
+  */
+
+  ctx.translate(
+    canvas.width,
+    0
+  );
+
+  ctx.scale(
+    -1,
+    1
+  );
+
+
+  ctx.drawImage(
+    video,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+
+  selfieData =
+    canvas.toDataURL(
+      'image/jpeg',
+      0.85
+    );
+
+
+  const preview =
+    document.getElementById(
+      'photoPreview'
+    );
+
+
+  preview.src =
+    selfieData;
+
+  preview.style.display =
+    'block';
+
+
+  video.style.display =
+    'none';
+
+
+  document
+    .getElementById(
+      'cameraPlaceholder'
+    )
+    .style.display =
+    'none';
+
+
+  document
+    .getElementById(
+      'btnRetake'
+    )
+    .classList
+    .remove('hidden');
+
+
+  updateAttendanceButtons();
+
+
+  return true;
+}
+
+
+/* =====================================================
+   RETAKE
+===================================================== */
+
+function retakePhoto() {
+
+  selfieData = '';
+
+  const preview =
+    document.getElementById(
+      'photoPreview'
+    );
+
+  const video =
+    document.getElementById(
+      'video'
+    );
+
+
+  preview.style.display =
+    'none';
+
+  video.style.display =
+    'block';
+
+
+  document
+    .getElementById(
+      'btnRetake'
+    )
+    .classList
+    .add('hidden');
+
+
+  updateAttendanceButtons();
+
+}
+
+
+/* =====================================================
+   ATTENDANCE
+===================================================== */
+
+function takeAttendance(
+  type
+) {
+
+  if (!cameraAllowed) {
+
+    showModal(
+      'Kamera',
+      'Silakan izinkan kamera terlebih dahulu.'
+    );
+
+    showPermissionOverlay();
+
+    return;
+  }
+
+
+  if (!locationAllowed) {
+
+    showModal(
+      'GPS',
+      'Silakan izinkan GPS terlebih dahulu.'
+    );
+
+    showPermissionOverlay();
+
+    return;
+  }
+
+
+  if (!insideRadius) {
+
+    showModal(
+      'Lokasi',
+      'Anda berada di luar area absensi.'
+    );
+
+    return;
+  }
+
+
+  if (!selfieData) {
+
+    const captured =
+      captureSelfie();
+
+    if (!captured) {
+      return;
+    }
+
+  }
+
+
+  showLoading(
+    'Menyimpan absensi...'
+  );
+
+
+  google.script.run
+
+    .withSuccessHandler(function(result) {
+
+      hideLoading();
+
+
+      if (!result || !result.success) {
+
+        showModal(
+          'Absensi',
+          result?.message ||
+          'Absensi gagal.'
+        );
+
+        return;
+      }
+
+
+      showModal(
+        'Absensi Berhasil',
+        result.message +
+        '<br><br>' +
+        'Tanggal: ' +
+        result.date +
+        '<br>' +
+        'Jam server: ' +
+        result.time +
+        '<br>' +
+        'Jarak: ' +
+        result.distance +
+        ' meter'
+      );
+
+
+      selfieData = '';
+
+      retakePhoto();
+
+      loadEmployeeStatus();
+
+    })
+
+    .withFailureHandler(function(error) {
+
+      hideLoading();
+
+
+      showModal(
+        'Absensi Gagal',
+        error.message ||
+        String(error)
+      );
+
+    })
+
+    .submitAttendance({
+
+      userId:
+        currentUser.id,
+
+      type:
+        type,
+
+      latitude:
+        currentLatitude,
+
+      longitude:
+        currentLongitude,
+
+      accuracy:
+        currentAccuracy,
+
+      photo:
+        selfieData
+
+    });
+
+}
+
+
+/* =====================================================
+   EMPLOYEE STATUS
+===================================================== */
+
+function loadEmployeeStatus() {
+
+  if (!currentUser) {
+    return;
+  }
+
+
+  google.script.run
+
+    .withSuccessHandler(function(data) {
+
+      const masuk =
+        document.getElementById(
+          'statusMasuk'
+        );
+
+      const pulang =
+        document.getElementById(
+          'statusPulang'
+        );
+
+
+      masuk.textContent =
+        data.masuk
+          ? data.masuk.jam
+          : '-';
+
+
+      pulang.textContent =
+        data.pulang
+          ? data.pulang.jam
+          : '-';
+
+
+      updateAttendanceButtons();
+
+    })
+
+    .withFailureHandler(function(error) {
+
+      console.error(
+        error
+      );
+
+    })
+
+    .getEmployeeTodayStatus(
+      currentUser.id
+    );
+
+}
+
+
+/* =====================================================
+   ADMIN DASHBOARD
+===================================================== */
+
+function loadAdminDashboard() {
+
+  loadAdminStats();
+
+  loadEmployees();
+
+}
+
+
+/* =====================================================
+   ADMIN STATS
+===================================================== */
+
+function loadAdminStats() {
+
+  google.script.run
+
+    .withSuccessHandler(function(data) {
+
+      document
+        .getElementById(
+          'statKaryawan'
+        )
+        .textContent =
+        data.totalKaryawan;
+
+
+      document
+        .getElementById(
+          'statHadir'
+        )
+        .textContent =
+        data.hadir;
+
+
+      document
+        .getElementById(
+          'statPulang'
+        )
+        .textContent =
+        data.pulang;
+
+
+      document
+        .getElementById(
+          'statBelum'
+        )
+        .textContent =
+        data.belumAbsen;
+
+
+      renderAttendanceTable(
+        data.activity || []
+      );
+
+    })
+
+    .withFailureHandler(function(error) {
+
+      showModal(
+        'Dashboard',
+        error.message ||
+        String(error)
+      );
+
+    })
+
+    .getAdminDashboard(
+      currentUser.id
+    );
+
+}
+
+
+/* =====================================================
+   EMPLOYEE TABLE
+===================================================== */
+
+function loadEmployees() {
+
+  google.script.run
+
+    .withSuccessHandler(function(data) {
+
+      renderEmployeeTable(
+        data || []
+      );
+
+    })
+
+    .withFailureHandler(function(error) {
+
+      showModal(
+        'Data Karyawan',
+        error.message ||
+        String(error)
+      );
+
+    })
+
+    .getAllEmployees(
+      currentUser.id
+    );
+
+}
+
+
+/* =====================================================
+   RENDER EMPLOYEE TABLE
+===================================================== */
+
+function renderEmployeeTable(
+  employees
+) {
+
+  const tbody =
+    document.getElementById(
+      'employeeTableBody'
+    );
+
+
+  tbody.innerHTML = '';
+
+
+  employees.forEach(function(emp) {
+
+    const tr =
+      document.createElement(
+        'tr'
+      );
+
+
+    const roleBadge =
+      emp.role === 'ADMIN'
+        ? '<span class="badge badge-admin">ADMIN</span>'
+        : emp.role === 'SUPER ADMIN'
+          ? '<span class="badge badge-admin">SUPER ADMIN</span>'
+          : '<span class="badge badge-user">KARYAWAN</span>';
+
+
+    const statusBadge =
+      String(emp.status).toUpperCase() === 'AKTIF'
+        ? '<span class="badge badge-active">AKTIF</span>'
+        : '<span class="badge badge-inactive">NONAKTIF</span>';
+
+
+    const isRicko =
+      String(emp.username).toLowerCase() ===
+      'ricko';
+
+
+    let action = '';
+
+
+    if (isRicko) {
+
+      action =
+        '<span style="color:#888">Terkunci</span>';
+
+    } else {
+
+      action =
+        '<button class="btn btn-secondary" ' +
+        'style="padding:7px 10px;font-size:11px" ' +
+        'onclick=\'editEmployee(' +
+        JSON.stringify(emp).replace(
+          /'/g,
+          '&#39;'
+        ) +
+        ')\'>EDIT</button> ' +
+
+        '<button class="btn btn-danger" ' +
+        'style="padding:7px 10px;font-size:11px" ' +
+        'onclick="toggleEmployee(\'' +
+        emp.id +
+        '\')">' +
+        (
+          String(emp.status).toUpperCase() ===
+          'AKTIF'
+            ? 'NONAKTIFKAN'
+            : 'AKTIFKAN'
+        ) +
+        '</button>';
+
+    }
+
+
+    tr.innerHTML =
+
+      '<td>' +
+      escapeHtml(emp.id) +
+      '</td>' +
+
+      '<td>' +
+      escapeHtml(emp.nama) +
+      '</td>' +
+
+      '<td>' +
+      escapeHtml(emp.username) +
+      '</td>' +
+
+      '<td>' +
+      roleBadge +
+      '</td>' +
+
+      '<td>' +
+      escapeHtml(emp.jabatan || '-') +
+      '</td>' +
+
+      '<td>' +
+      escapeHtml(emp.departemen || '-') +
+      '</td>' +
+
+      '<td>' +
+      statusBadge +
+      '</td>' +
+
+      '<td>' +
+      action +
+      '</td>';
+
+
+    tbody.appendChild(
+      tr
+    );
+
+  });
+
+}
+
+
+/* =====================================================
+   ATTENDANCE TABLE
+===================================================== */
+
+function renderAttendanceTable(
+  rows
+) {
+
+  const tbody =
+    document.getElementById(
+      'attendanceTableBody'
+    );
+
+
+  tbody.innerHTML = '';
+
+
+  rows.forEach(function(row) {
+
+    const tr =
+      document.createElement(
+        'tr'
+      );
+
+
+    const photo =
+      row.foto
+        ? '<a href="' +
+          row.foto +
+          '" target="_blank" style="color:#d4af37">Lihat</a>'
+        : '-';
+
+
+    tr.innerHTML =
+
+      '<td>' +
+      escapeHtml(row.nama) +
+      '</td>' +
+
+      '<td>' +
+      escapeHtml(row.tanggal) +
+      '</td>' +
+
+      '<td>' +
+      escapeHtml(row.jam) +
+      '</td>' +
+
+      '<td>' +
+      escapeHtml(row.tipe) +
+      '</td>' +
+
+      '<td>' +
+      escapeHtml(row.jarak) +
+      ' m</td>' +
+
+      '<td>' +
+      photo +
+      '</td>';
+
+
+    tbody.appendChild(
+      tr
+    );
+
+  });
+
+}
+
+
+/* =====================================================
+   ADD EMPLOYEE
+===================================================== */
+
+function openEmployeeModal() {
+
+  document
+    .getElementById(
+      'employeeModalOverlay'
+    )
+    .classList
+    .remove('hidden');
+
+
+  document
+    .getElementById(
+      'employeeModalTitle'
+    )
+    .textContent =
+    'Tambah Karyawan';
+
+
+  document
+    .getElementById(
+      'employeeId'
+    )
+    .value = '';
+
+
+  document
+    .getElementById(
+      'employeeName'
+    )
+    .value = '';
+
+
+  document
+    .getElementById(
+      'employeeUsername'
+    )
+    .value = '';
+
+
+  document
+    .getElementById(
+      'employeePassword'
+    )
+    .value = '';
+
+
+  document
+    .getElementById(
+      'employeeRole'
+    )
+    .value =
+    'KARYAWAN';
+
+
+  document
+    .getElementById(
+      'employeePosition'
+    )
+    .value = '';
+
+
+  document
+    .getElementById(
+      'employeeDepartment'
+    )
+    .value = '';
+
+
+  document
+    .getElementById(
+      'employeeStatus'
+    )
+    .value =
+    'AKTIF';
+
+
+  document
+    .getElementById(
+      'employeeStatusGroup'
+    )
+    .classList
+    .add('hidden');
+
+}
+
+
+function closeEmployeeModal() {
+
+  document
+    .getElementById(
+      'employeeModalOverlay'
+    )
+    .classList
+    .add('hidden');
+
+}
+
+
+/* =====================================================
+   EDIT EMPLOYEE
+===================================================== */
+
+function editEmployee(
+  employee
+) {
+
+  document
+    .getElementById(
+      'employeeModalOverlay'
+    )
+    .classList
+    .remove('hidden');
+
+
+  document
+    .getElementById(
+      'employeeModalTitle'
+    )
+    .textContent =
+    'Edit Karyawan';
+
+
+  document
+    .getElementById(
+      'employeeId'
+    )
+    .value =
+    employee.id;
+
+
+  document
+    .getElementById(
+      'employeeName'
+    )
+    .value =
+    employee.nama || '';
+
+
+  document
+    .getElementById(
+      'employeeUsername'
+    )
+    .value =
+    employee.username || '';
+
+
+  document
+    .getElementById(
+      'employeePassword'
+    )
+    .value = '';
+
+
+  document
+    .getElementById(
+      'employeeRole'
+    )
+    .value =
+    employee.role || 'KARYAWAN';
+
+
+  document
+    .getElementById(
+      'employeePosition'
+    )
+    .value =
+    employee.jabatan || '';
+
+
+  document
+    .getElementById(
+      'employeeDepartment'
+    )
+    .value =
+    employee.departemen || '';
+
+
+  document
+    .getElementById(
+      'employeeStatus'
+    )
+    .value =
+    employee.status || 'AKTIF';
+
+
+  document
+    .getElementById(
+      'employeeStatusGroup'
+    )
+    .classList
+    .remove('hidden');
+
+}
+
+
+/* =====================================================
+   SAVE EMPLOYEE
+===================================================== */
+
+function saveEmployee() {
+
+  const id =
+    document.getElementById(
+      'employeeId'
+    ).value;
+
+
+  const employee = {
+
+    id: id,
+
+    nama:
+      document.getElementById(
+        'employeeName'
+      ).value.trim(),
+
+    username:
+      document.getElementById(
+        'employeeUsername'
+      ).value.trim(),
+
+    password:
+      document.getElementById(
+        'employeePassword'
+      ).value,
+
+    role:
+      document.getElementById(
+        'employeeRole'
+      ).value,
+
+    jabatan:
+      document.getElementById(
+        'employeePosition'
+      ).value.trim(),
+
+    departemen:
+      document.getElementById(
+        'employeeDepartment'
+      ).value.trim(),
+
+    status:
+      document.getElementById(
+        'employeeStatus'
+      ).value
+
+  };
+
+
+  if (!employee.nama) {
+
+    showModal(
+      'Karyawan',
+      'Nama wajib diisi.'
+    );
+
+    return;
+  }
+
+
+  if (!employee.username) {
+
+    showModal(
+      'Karyawan',
+      'Username wajib diisi.'
+    );
+
+    return;
+  }
+
+
+  if (!id && !employee.password) {
+
+    showModal(
+      'Karyawan',
+      'Password wajib diisi.'
+    );
+
+    return;
+  }
+
+
+  showLoading(
+    'Menyimpan data karyawan...'
+  );
+
+
+  if (id) {
+
+    google.script.run
+
+      .withSuccessHandler(function(result) {
+
+        hideLoading();
+
+        closeEmployeeModal();
+
+        showModal(
+          'Berhasil',
+          result.message
+        );
+
+        loadEmployees();
+
+        loadAdminStats();
+
+      })
+
+      .withFailureHandler(function(error) {
+
+        hideLoading();
+
+        showModal(
+          'Gagal',
+          error.message ||
+          String(error)
+        );
+
+      })
+
+      .updateEmployee(
+        currentUser.id,
+        employee
+      );
+
+  } else {
+
+    google.script.run
+
+      .withSuccessHandler(function(result) {
+
+        hideLoading();
+
+        closeEmployeeModal();
+
+        showModal(
+          'Berhasil',
+          result.message
+        );
+
+        loadEmployees();
+
+        loadAdminStats();
+
+      })
+
+      .withFailureHandler(function(error) {
+
+        hideLoading();
+
+        showModal(
+          'Gagal',
+          error.message ||
+          String(error)
+        );
+
+      })
+
+      .addEmployee(
+        currentUser.id,
+        employee
+      );
+
+  }
+
+}
+
+
+/* =====================================================
+   TOGGLE EMPLOYEE
+===================================================== */
+
+function toggleEmployee(
+  employeeId
+) {
+
+  if (
+    !confirm(
+      'Apakah Anda yakin ingin mengubah status karyawan ini?'
+    )
+  ) {
+
+    return;
+  }
+
+
+  showLoading(
+    'Mengubah status...'
+  );
+
+
+  google.script.run
+
+    .withSuccessHandler(function(result) {
+
+      hideLoading();
+
+      showModal(
+        'Berhasil',
+        result.message
+      );
+
+      loadEmployees();
+
+      loadAdminStats();
+
+    })
+
+    .withFailureHandler(function(error) {
+
+      hideLoading();
+
+      showModal(
+        'Gagal',
+        error.message ||
+        String(error)
+      );
+
+    })
+
+    .deactivateEmployee(
+      currentUser.id,
+      employeeId
+    );
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout() {
+
+  stopCamera();
+
+
+  currentUser = null;
+
+  selfieData = '';
+
+  currentLatitude = null;
+
+  currentLongitude = null;
+
+  currentAccuracy = null;
+
+  locationAllowed = false;
+
+  cameraAllowed = false;
+
+  insideRadius = false;
+
+
+  document
+    .getElementById(
+      'appPage'
+    )
+    .classList
+    .add('hidden');
+
+
+  document
+    .getElementById(
+      'loginPage'
+    )
+    .classList
+    .remove('hidden');
+
+
+  document
+    .getElementById(
+      'username'
+    )
+    .value = '';
+
+
+  document
+    .getElementById(
+      'password'
+    )
+    .value = '';
+
+}
+
+
+/* =====================================================
+   STOP CAMERA
+===================================================== */
+
+function stopCamera() {
+
+  if (cameraStream) {
+
+    cameraStream
+      .getTracks()
+      .forEach(function(track) {
+
+        track.stop();
+
+      });
+
+    cameraStream = null;
+
+  }
+
+
+  const video =
+    document.getElementById(
+      'video'
+    );
+
+
+  if (video) {
+
+    video.srcObject =
+      null;
+
+  }
+
+
+  cameraAllowed = false;
+
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+function showModal(
+  title,
+  message
+) {
+
+  document
+    .getElementById(
+      'modalTitle'
+    )
+    .textContent =
+    title;
+
+
+  document
+    .getElementById(
+      'modalMessage'
+    )
+    .innerHTML =
+    message;
+
+
+  document
+    .getElementById(
+      'modalOverlay'
+    )
+    .classList
+    .remove('hidden');
+
+}
+
+
+function closeModal() {
+
+  document
+    .getElementById(
+      'modalOverlay'
+    )
+    .classList
+    .add('hidden');
+
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+function showLoading(
+  message
+) {
+
+  document
+    .getElementById(
+      'loadingText'
+    )
+    .textContent =
+    message ||
+    'Memproses...';
+
+
+  document
+    .getElementById(
+      'loadingOverlay'
+    )
+    .classList
+    .remove('hidden');
+
+}
+
+
+function hideLoading() {
+
+  document
+    .getElementById(
+      'loadingOverlay'
+    )
+    .classList
+    .add('hidden');
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(
+  value
+) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return '';
+
+  }
+
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      '&amp;'
+    )
+
+    .replace(
+      /</g,
+      '&lt;'
+    )
+
+    .replace(
+      />/g,
+      '&gt;'
+    )
+
+    .replace(
+      /"/g,
+      '&quot;'
+    )
+
+    .replace(
+      /'/g,
+      '&#039;'
+    );
+
+}
+
+
+/* =====================================================
+   INITIAL
+===================================================== */
+
+document.addEventListener(
+  'DOMContentLoaded',
+  function() {
+
+    updatePermissionStatusUI();
+
+  }
+);
+
+</script>
+
+</body>
+</html>
